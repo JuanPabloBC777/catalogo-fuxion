@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Catálogo FuXion® — Productos Nutracéuticos</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green-deep: #1a3a2a;
+    --green-mid: #2d6a4f;
+    --green-bright: #40916c;
+    --green-light: #74c69d;
+    --lime: #b7e4c7;
+    --cream: #f8f5ee;
+    --gold: #d4a853;
+    --text-dark: #1a1a1a;
+    --text-muted: #6b7c6e;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--text-dark);
+    min-height: 100vh;
+  }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, var(--green-deep) 0%, var(--green-mid) 60%, var(--green-bright) 100%);
+    padding: 60px 32px 48px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 80% 20%, rgba(180,230,180,0.15) 0%, transparent 60%),
+                radial-gradient(ellipse at 20% 80%, rgba(212,168,83,0.1) 0%, transparent 50%);
+  }
+  .hero-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.25);
+    color: var(--lime);
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 6px 16px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+    position: relative;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    color: #fff;
+    font-size: clamp(32px, 5vw, 58px);
+    font-weight: 900;
+    line-height: 1.1;
+    position: relative;
+    margin-bottom: 12px;
+  }
+  .hero h1 span { color: var(--gold); }
+  .hero p {
+    color: rgba(255,255,255,0.75);
+    font-size: 15px;
+    max-width: 520px;
+    margin: 0 auto 32px;
+    line-height: 1.6;
+    position: relative;
+  }
+  .hero-stats {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    position: relative;
+    flex-wrap: wrap;
+  }
+  .hero-stat { text-align: center; }
+  .hero-stat .num {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    color: var(--gold);
+    font-weight: 700;
+    display: block;
+  }
+  .hero-stat .lbl {
+    font-size: 11px;
+    color: rgba(255,255,255,0.6);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+  }
+
+  /* FILTERS */
+  .filter-bar {
+    background: var(--green-deep);
+    padding: 0 24px;
+    display: flex;
+    gap: 4px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .filter-bar::-webkit-scrollbar { display: none; }
+  .filter-btn {
+    background: none;
+    border: none;
+    color: rgba(255,255,255,0.55);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    padding: 14px 16px;
+    cursor: pointer;
+    white-space: nowrap;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .filter-btn:hover { color: #fff; }
+  .filter-btn.active {
+    color: var(--gold);
+    border-bottom-color: var(--gold);
+  }
+  .filter-btn .cat-icon { font-size: 14px; }
+
+  /* CONTENT */
+  .content { max-width: 1100px; margin: 0 auto; padding: 40px 20px 60px; }
+
+  .section { display: none; }
+  .section.visible { display: block; }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+  .section-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 24px;
+    color: var(--green-deep);
+    font-weight: 700;
+  }
+  .section-desc {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-top: 2px;
+  }
+
+  /* GRID */
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+    gap: 20px;
+  }
+
+  .product-card {
+    background: #fff;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    transition: transform 0.25s, box-shadow 0.25s;
+    cursor: default;
+    border: 1px solid rgba(0,0,0,0.05);
+  }
+  .product-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 28px rgba(0,0,0,0.12);
+  }
+
+  .card-header {
+    padding: 20px 20px 14px;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+  }
+  .card-emoji {
+    width: 52px;
+    height: 52px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    flex-shrink: 0;
+  }
+  .card-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--green-deep);
+    line-height: 1.3;
+    margin-bottom: 4px;
+  }
+  .card-format {
+    font-size: 11px;
+    color: var(--text-muted);
+    background: var(--cream);
+    padding: 2px 8px;
+    border-radius: 6px;
+    display: inline-block;
+  }
+  .card-body { padding: 0 20px 16px; }
+  .card-benefit {
+    font-size: 12.5px;
+    color: var(--text-muted);
+    line-height: 1.55;
+    margin-bottom: 12px;
+  }
+  .card-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+  .tag {
+    font-size: 10px;
+    padding: 3px 9px;
+    border-radius: 8px;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+  }
+
+  /* Category colors */
+  .cat-limpieza { background: #e8f5e9; } .cat-limpieza .card-emoji { background: #e8f5e9; } .cat-limpieza .tag { background: #c8e6c9; color: #2e7d32; }
+  .cat-nutricion { background: #fff8e1; } .cat-nutricion .card-emoji { background: #fff8e1; } .cat-nutricion .tag { background: #ffecb3; color: #e65100; }
+  .cat-revitaliza { background: #fce4ec; } .cat-revitaliza .card-emoji { background: #fce4ec; } .cat-revitaliza .tag { background: #f8bbd0; color: #880e4f; }
+  .cat-peso { background: #e3f2fd; } .cat-peso .card-emoji { background: #e3f2fd; } .cat-peso .tag { background: #bbdefb; color: #0d47a1; }
+  .cat-antiedad { background: #f3e5f5; } .cat-antiedad .card-emoji { background: #f3e5f5; } .cat-antiedad .tag { background: #e1bee7; color: #4a148c; }
+  .cat-inmune { background: #e0f2f1; } .cat-inmune .card-emoji { background: #e0f2f1; } .cat-inmune .tag { background: #b2dfdb; color: #004d40; }
+  .cat-mental { background: #fff3e0; } .cat-mental .card-emoji { background: #fff3e0; } .cat-mental .tag { background: #ffe0b2; color: #bf360c; }
+  .cat-deporte { background: #e8eaf6; } .cat-deporte .card-emoji { background: #e8eaf6; } .cat-deporte .tag { background: #c5cae9; color: #1a237e; }
+  .cat-cosmetica { background: #fdf2f8; } .cat-cosmetica .card-emoji { background: #fdf2f8; } .cat-cosmetica .tag { background: #f9d0eb; color: #86007b; }
+
+  /* SECTION ICON colors */
+  .icon-limpieza { background: #e8f5e9; }
+  .icon-nutricion { background: #fff8e1; }
+  .icon-revitaliza { background: #fce4ec; }
+  .icon-peso { background: #e3f2fd; }
+  .icon-antiedad { background: #f3e5f5; }
+  .icon-inmune { background: #e0f2f1; }
+  .icon-mental { background: #fff3e0; }
+  .icon-deporte { background: #e8eaf6; }
+  .icon-cosmetica { background: #fdf2f8; }
+
+  /* DISCLAIMER */
+  .disclaimer {
+    margin-top: 48px;
+    background: #fff;
+    border-left: 4px solid var(--gold);
+    border-radius: 0 12px 12px 0;
+    padding: 20px 24px;
+  }
+  .disclaimer h3 {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--green-deep);
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .disclaimer p {
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+
+  @media (max-width: 600px) {
+    .products-grid { grid-template-columns: 1fr; }
+    .hero-stats { gap: 24px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-badge">🌿 Catálogo Informativo Independiente</div>
+  <h1>Productos <span>FuXion</span>®<br>Nutracéuticos</h1>
+  <p>Bebidas funcionales elaboradas con extractos de plantas naturales, culturas andinas, amazónicas y asiáticas combinadas con biotecnología moderna.</p>
+  <div class="hero-stats">
+    <div class="hero-stat"><span class="num">32</span><span class="lbl">Países</span></div>
+    <div class="hero-stat"><span class="num">40+</span><span class="lbl">Productos</span></div>
+    <div class="hero-stat"><span class="num">9</span><span class="lbl">Categorías</span></div>
+    <div class="hero-stat"><span class="num">2006</span><span class="lbl">Fundada</span></div>
+  </div>
+</div>
+
+<div class="filter-bar">
+  <button class="filter-btn active" onclick="showSection('all', this)"><span class="cat-icon">🌿</span> Todos</button>
+  <button class="filter-btn" onclick="showSection('limpieza', this)"><span class="cat-icon">🫧</span> Limpieza</button>
+  <button class="filter-btn" onclick="showSection('nutricion', this)"><span class="cat-icon">🥗</span> Nutrición</button>
+  <button class="filter-btn" onclick="showSection('revitaliza', this)"><span class="cat-icon">⚡</span> Revitaliza</button>
+  <button class="filter-btn" onclick="showSection('peso', this)"><span class="cat-icon">⚖️</span> Control de Peso</button>
+  <button class="filter-btn" onclick="showSection('antiedad', this)"><span class="cat-icon">✨</span> Antiedad</button>
+  <button class="filter-btn" onclick="showSection('inmune', this)"><span class="cat-icon">🛡️</span> Sistema Inmune</button>
+  <button class="filter-btn" onclick="showSection('mental', this)"><span class="cat-icon">🧠</span> Vigor Mental</button>
+  <button class="filter-btn" onclick="showSection('deporte', this)"><span class="cat-icon">🏃</span> Deporte</button>
+  <button class="filter-btn" onclick="showSection('cosmetica', this)"><span class="cat-icon">💄</span> Cosmética</button>
+</div>
+
+<div class="content">
+
+  <!-- LIMPIEZA -->
+  <div class="section visible" id="sec-limpieza">
+    <div class="section-header">
+      <div class="section-icon icon-limpieza">🫧</div>
+      <div>
+        <div class="section-title">Limpieza & Detox</div>
+        <div class="section-desc">Bebidas para depurar y desintoxicar el organismo de forma natural</div>
+      </div>
+    </div>
+    <div class="products-grid">
+      <div class="product-card">
+        <div class="card-header">
+          <div class="card-emoji cat-limpieza">🍋</div>
+          <div>
+            <div class="card-name">Prunex 1</div>
+            <span class="card-format">28 sobres</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <p class="card-benefit">Bebida laxante natural para el manejo del estreñimiento y limpieza del colon. Formulada con ciruelas y plantas depurativas.</p>
+          <div class="card-tags"><span class="tag cat-limpieza">Colon</span><span class="tag cat-limpieza">Digestivo</span><span class="tag cat-limpieza">Natural</span></div>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="card-header">
+          <div class="card-emoji cat-limpieza">🌱</div>
+          <div>
+            <div class="card-name">Flora Liv</div>
+            <span class="card-format">28 sobres</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <p class="card-benefit">Fibras naturales y probióticos para regenerar la flora intestinal. Combina ingredientes prebióticos y fermentos lácticos.</p>
+          <div class="card-tags"><span class="tag cat-limpieza">Probióticos</span><span class="tag cat-limpieza">Flora intestinal</span></div>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="card-header">
+          <div class="card-emoji cat-limpieza">🌿</div>
+          <div>
+            <div class="card-name">Pack Detox 5 días</div>
+            <span class="card-format">Kit 5 días</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <p class="card-benefit">Programa de limpieza intensiva de 5 días. Combina productos depurativos para un reinicio completo del organismo.</p>
+          <div class="card-tags"><span class="tag cat-limpieza">Kit</span><span class="tag cat-limpieza">Detox</span></div>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="card-header">
+          <div class="card-emoji cat-limpieza">🥬</div>
+          <div>
+            <div class="card-name">Liquid Fiber</div>
+            <span class="card-format">28 sobres</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <p class="card-benefit">Fibra soluble e insoluble en forma líquida para mejorar el tránsito intestinal y la sensación de saciedad.</p>
+          <div class="card-tags"><span class="tag cat-limpieza">Fibra</span><span class="tag cat-limpieza">Saciedad</span></div>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="card-header">
+          <div class="card-emoji cat-limpieza">⚗️</div>
+          <div>
+            <div class="card-name">Alpha Balance</div>
+            <span class="card-format">28 sobres</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <p class="card-benefit">Formulación para equilibrar el pH del organismo y apoyar procesos de desintoxicación celular.</p>
+          <div class="card-tags"><span class="tag cat-limpieza">pH</span><span class="tag cat-limpieza">Celular</span></div>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="card-header">
+          <div class="card-emoji cat-limpieza">🍓</div>
+          <div>
+            <div class="card-name">Berry Balance</div>
+            <span class="card-format">28 sobres</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <p class="card-benefit">Mezcla de berries silvestres con propiedades antioxidantes y depurativas. Sabor agradable de frutos rojos.</p>
+          <div class="card-tags"><span class="tag cat-limpieza">Antioxidante</span><span class="tag cat-limpieza">Berries</span></div>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="card-header">
+          <div class="card-emoji cat-limpieza">🌊</div>
+          <div>
+            <div class="card-name">Rexet</div>
+            <span class="card-format">28 sobres</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <p class="card-benefit">Soporte para la eliminación de retención de líquidos. Combina plantas diuréticas naturales.</p>
+          <div class="card-tags"><span class="tag cat-limpieza">Diurético</span><span class="tag cat-limpieza">Líquidos</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NUTRICION -->
+  <div class="section visible" id="sec-nutricion">
+    <div class="section-header">
+      <div class="section-icon icon-nutricion">🥗</div>
+      <div>
+        <div class="section-title">Nutrición</div>
+        <div class="section-desc">Suplementación con proteínas, vitaminas y minerales esenciales</div>
+      </div>
+    </div>
+    <div class="products-grid">
+      <div class="product-card">
+        <div class="card-header">
+          <div class="card-emoji cat-nutricion">🛡️</div>
+          <div>
+            <div class="card-name">Biopro+ Tect</div>
+            <span class="card-format">14 sobres</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <p class="card-benefit">Batido proteico con ingredientes que fortalecen el sistema inmunológico. Apoya la nutrición y defensa del organismo.</p>
+          <div class="card-tags"><span class="tag cat-nutricion">Proteína</span><span class="tag cat-nutricion">Inmune</span></div>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="card-header">
+          <div class="card-emoji cat-nutricion">💪</div>
+          <div>
+            <div class="card-name">Protein Active</div>
+            <span class="card-format">14 sobres</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <p class="card-benefit">Proteína completa para personas activas. Soporte para la masa muscular y la recuperación post-ejercicio.</p>
+          <div class="card-tags"><span class="tag cat-nutricion">Músculo</span><span class="tag cat-nutricion">Recuperación</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- REVITALIZA -->
+  <div class="section visible" id="sec-revitaliza">
+    <div class="section-header">
+      <div class="section-icon icon-revitaliza">⚡</div>
+      <div>
+        <div class="section-title">Revitaliza & Energía</div>
+        <div class="section-desc">Energía natural para el día a día sin exceso de estimulantes</div>
+      </div>
+    </div>
+    <div class="products-grid">
+      <div class="product-card">
+        <div class="card-header">
+          <div class="card-emoji cat-revitaliza">☕</div>
+          <div>
+            <div class="card-name">Vita Xtra T+</div>
+            <span class="card-format">28 sobres</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <p class="card-benefit">Té energizante natural para combatir el cansancio excesivo. Formulado con extractos de plantas adaptógenas.</p>
+          <div class="card-tags"><span class="tag cat-revitaliza">Energía</span><span class="tag cat-revitaliza">Té</span><span class="tag cat-revitaliza">Cansancio</span></div>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="card-header">
+          <div class="card-emoji cat-revitaliza">🌽</div>
+          <div>
+            <div class="card-name">Vitaenergia</div>
+            <span class="card-format">30 sobres</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <p class="card-benefit">Bebida energizante con base en chicha morada andina y vitaminas del complejo B. Energía con sabor tradicional.</p>
+          <div class="card-tags"><span class="tag cat-revitaliza">Vitaminas B</span><span class="tag cat-revitaliza">Andino</span></div>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="card-header">
+          <div class="card-emoji cat-revitaliza">🥤</div>
+          <div>
+            <div class="card-name">Xpeed</div>
+            <span class="card-format">4 latas</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <p class="card-benefit">Bebida energética lista para tomar. Rendimiento físico y mental con ingredientes naturales seleccionados.</p>
+          <div class="card-tags"><span class="tag cat-revitaliza">Listo para tomar</span><span class="tag cat-revitaliza">Deportivo</span></div>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="card-header">
+          <div class="card-emoji cat-revitaliza">🍊</div>
+          <div>
+            <div class="card-name">Xpeed Citrus Power</div>
+            <span class="card-format">4 latas</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <p class="card-benefit">Versión cítrica del energizante Xpeed. Sabor refrescante de naranja y limón con activos energizantes.</p>
+          <div class="card-tags"><span class="tag cat-revitaliza">Cítrico</span><span class="tag cat-revitaliza">Refrescante</span></div>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="card-header">
+          <div class="card-emoji cat-revitaliza">🌅</div>
+          <div>
+            <div class="card-name">Nutraday</div>
+            <span class="card-format">28 sobres</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <p class="card-benefit">Multivitamínico diario en formato bebida. Complementa la nutrición con vitaminas y minerales esenciales para el día.</p>
+          <div class="card-tags"><span class="tag cat-revitaliza">Vitaminas</span><span class="tag cat-revitaliza">Diario</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTROL DE PESO -->
+  <div class="section visible" id="sec-peso">
+    <div class="section-header">
+      <div class="section-icon icon-peso">⚖️</div>
+      <div>
+        <div class="section-title">Control de Peso</div>
+        <div class="section-desc">Apoyo nutricional para el manejo del peso corporal y la composición física</div>
+      </div>
+    </div>
+    <div class="products-grid">
+      <div class="product-card">
+        <div class="card-header">
+          <div class="card-emoji cat-peso">🥑</div>
+          <div>
+            <div class="card-name">Pack 5/14 Keto</div>
+            <span class="card-format">Programa 14 días</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <p class="card-benefit">Kit diseñado para acompañar dietas bajas en carbohidratos. Soporte cetogénico con 5 productos coordinados.</p>
+          <div class="card-tags"><span class="tag cat-peso">Keto</span><span class="tag cat-peso">Kit</span><span class="tag cat-peso">14 días</span></div>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="card-header">
+          <div class="card-emoji cat-peso">🏃</div>
+          <div>
+            <div class="card-name">Pack 5/14 Active</div>
+            <span class="card-format">Programa 14 días</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <p class="card-benefit">Kit para personas activas que desean controlar el peso. Combina nutrición y metabolismo activo.</p>
+          <div class="card-tags"><span class="tag cat-peso">Activo</span><span class="tag cat-peso">Kit</span></div>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="card-header">
+          <div class="card-emoji cat-peso">🥤</div>
+          <div>
+            <div class="card-name">Biopro+ Fit</div>
+            <span class="card-format">14 sobres</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <p class="card-benefit">Batido proteico formulado específicamente para reemplazo de comidas y control calórico.</p>
+          <div class="card-tags"><span class="tag cat-peso">Proteína</span><span class="tag cat-peso">Reemplazo</span></div>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="card-header">
+          <div class="card-emoji cat-peso">🍵</div>
+          <div>
+            <div class="card-name">Nocarb-T</div>
+            <span class="card-format">28 sobres</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <p class="card-benefit">Té con ingredientes que apoyan la reducción de la absorción de carbohidratos y el control glucémico.</p>
+          <div class="card-tags"><span class="tag cat-peso">Glucemia</span><span class="tag cat-peso">Té</span></div>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="card-header">
+          <div class="card-emoji cat-peso">🔥</div>
+          <div>
+            <div class="card-name">Thermo T3</div>
+            <span class="card-format">28 sobres</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <p class="card-benefit">Formulación termogénica natural para activar el metabolismo y favorecer la quema de grasas.</p>
+          <div class="card-tags"><span class="tag cat-peso">Termogénico</span><span class="tag cat-peso">Metabolismo</span></div>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="card-header">
+          <div class="card-emoji cat-peso">☕</div>
+          <div>
+            <div class="card-name">Café & Café Fit</div>
+            <span class="card-format">28 sobres</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <p class="card-benefit">Café funcional con ingredientes que complementan el control de peso. El ritual del café con beneficios extras.</p>
+          <div class="card-tags"><span class="tag cat-peso">Café</span><span class="tag cat-peso">Funcional</span></div>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="card-header">
+          <div class="card-emoji cat-peso">🍫</div>
+          <div>
+            <div class="card-name">Chocolate Fit</div>
+            <span class="card-format">28 sobres</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <p class="card-benefit">Bebida de chocolate con bajo contenido calórico y proteína. Para quienes desean controlar el peso sin sacrificar el sabor.</p>
+          <div class="card-tags"><span class="tag cat-peso">Chocolate</span><span class="tag cat-peso">Bajo en calorías</span></div>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="card-header">
+          <div class="card-emoji cat-peso">🍵</div>
+          <div>
+            <div class="card-name">Protein Xoup</div>
+            <span class="card-format">7 sobres</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <p class="card-benefit">Sopa proteica instantánea para reemplazo de comidas. Opción salada dentro de un programa de control de peso.</p>
+          <div class="card-tags"><span class="tag cat-peso">Sopa</span><span class="tag cat-peso">Proteína</span><span class="tag cat-peso">Reemplazo</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ANTIEDAD -->
+  <div class="section visible" id="sec-antiedad">
+    <div class="section-header">
+      <div class="section-icon icon-antiedad">✨</div>
+      <div>
+        <div class="section-title">Antiedad & Bienestar</div>
+        <div class="section-desc">Antioxidantes y nutrientes para frenar el envejecimiento celular</div>
+      </div>
+    </div>
+    <div class="products-grid">
+      <div class="product-card">
+        <div class="card-header">
+          <div class="card-emoji cat-antiedad">💎</div>
+          <div>
+            <div class="card-name">Youth Elixir</div>
+            <span class="card-format">28 sobres</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <p class="card-benefit">Elixir antiedad con colágeno, vitamina C y antioxidantes de alto poder. Para la piel, articulaciones y vitalidad general.</p>
+          <div class="card-tags"><span class="tag cat-antiedad">Colágeno</span><span class="tag cat-antiedad">Antioxidante</span><span class="tag cat-antiedad">Piel</span></div>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="card-header">
+          <div class="card-emoji cat-antiedad">🌸</div>
+          <div>
+            <div class="card-name">Beauty-In</div>
+            <span class="card-format">28 sobres</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <p class="card-benefit">Nutricosmético para belleza desde adentro. Combina biotina, silicio orgánico y extractos florales para cabello, piel y uñas.</p>
+          <div class="card-tags"><span class="tag cat-antiedad">Cabello</span><span class="tag cat-antiedad">Uñas</span><span class="tag cat-antiedad">Biotina</span></div>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="card-header">
+          <div class="card-emoji cat-antiedad">⚖️</div>
+          <div>
+            <div class="card-name">Probal</div>
+            <span class="card-format">28 sobres</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <p class="card-benefit">Equilibrio hormonal y bienestar femenino. Formulado con plantas adaptógenas y fitoestrogenos naturales.</p>
+          <div class="card-tags"><span class="tag cat-antiedad">Hormonal</span><span class="tag cat-antiedad">Femenino</span></div>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="card-header">
+          <div class="card-emoji cat-antiedad">🌾</div>
+          <div>
+            <div class="card-name">Golden Flx</div>
+            <span class="card-format">28 sobres</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <p class="card-benefit">Formulado con cúrcuma dorada y plantas antiinflamatorias para el cuidado de articulaciones y flexibilidad.</p>
+          <div class="card-tags"><span class="tag cat-antiedad">Cúrcuma</span><span class="tag cat-antiedad">Articulaciones</span></div>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="card-header">
+          <div class="card-emoji cat-antiedad">🌹</div>
+          <div>
+            <div class="card-name">Passion</div>
+            <span class="card-format">28 sobres</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <p class="card-benefit">Formulación para el bienestar íntimo y la vitalidad. Incluye maca andina y plantas revitalizantes.</p>
+          <div class="card-tags"><span class="tag cat-antiedad">Maca</span><span class="tag cat-antiedad">Vitalidad</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SISTEMA INMUNE -->
+  <div class="section visible" id="sec-inmune">
+    <div class="section-header">
+      <div class="section-icon icon-inmune">🛡️</div>
+      <div>
+        <div class="section-title">Sistema Inmune</div>
+        <div class="section-desc">Refuerzo de las defensas naturales del organismo</div>
+      </div>
+    </div>
+    <div class="products-grid">
+      <div class="product-card">
+        <div class="card-header">
+          <div class="card-emoji cat-inmune">🍄</div>
+          <div>
+            <div class="card-name">Gano+ Capuccino</div>
+            <span class="card-format">28 sobres</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <p class="card-benefit">Capuccino con Ganoderma lucidum (hongo reishi). Inmunidad reforzada con el placer de un café cremoso.</p>
+          <div class="card-tags"><span class="tag cat-inmune">Reishi</span><span class="tag cat-inmune">Café</span><span class="tag cat-inmune">Defensas</span></div>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="card-header">
+          <div class="card-emoji cat-inmune">🍵</div>
+          <div>
+            <div class="card-name">Gano+ T</div>
+            <span class="card-format">28 sobres</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <p class="card-benefit">Té con Ganoderma para el sistema inmune. Versión sin cafeína del beneficio del hongo reishi.</p>
+          <div class="card-tags"><span class="tag cat-inmune">Reishi</span><span class="tag cat-inmune">Té</span></div>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="card-header">
+          <div class="card-emoji cat-inmune">🌿</div>
+          <div>
+            <div class="card-name">Vera+</div>
+            <span class="card-format">28 sobres</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <p class="card-benefit">Aloe vera concentrado con vitaminas y minerales para el sistema inmune y la salud digestiva.</p>
+          <div class="card-tags"><span class="tag cat-inmune">Aloe vera</span><span class="tag cat-inmune">Vitaminas</span></div>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="card-header">
+          <div class="card-emoji cat-inmune">☕</div>
+          <div>
+            <div class="card-name">Café Ganomax</div>
+            <span class="card-format">28 sobres</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <p class="card-benefit">Máxima concentración de Ganoderma en formato café. Para quienes buscan el mayor aporte inmunomodulador.</p>
+          <div class="card-tags"><span class="tag cat-inmune">Ganoderma</span><span class="tag cat-inmune">Alto potencial</span></div>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="card-header">
+          <div class="card-emoji cat-inmune">🫙</div>
+          <div>
+            <div class="card-name">Duo Defense</div>
+            <span class="card-format">6 latas</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <p class="card-benefit">Combinación doble de activos inmunoestimulantes en bebida efervescente. Defensa intensificada en temporadas de mayor riesgo.</p>
+          <div class="card-tags"><span class="tag cat-inmune">Doble acción</span><span class="tag cat-inmune">Efervescente</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VIGOR MENTAL -->
+  <div class="section visible" id="sec-mental">
+    <div class="section-header">
+      <div class="section-icon icon-mental">🧠</div>
+      <div>
+        <div class="section-title">Vigor Mental</div>
+        <div class="section-desc">Equilibrio nervioso, concentración y manejo del estrés</div>
+      </div>
+    </div>
+    <div class="products-grid">
+      <div class="product-card">
+        <div class="card-header">
+          <div class="card-emoji cat-mental">😌</div>
+          <div>
+            <div class="card-name">No Stress</div>
+            <span class="card-format">28 sobres</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <p class="card-benefit">Formulación con plantas adaptógenas (ashwagandha, valeriana, pasiflora) para reducir el estrés y la ansiedad de forma natural.</p>
+          <div class="card-tags"><span class="tag cat-mental">Estrés</span><span class="tag cat-mental">Adaptógeno</span><span class="tag cat-mental">Ansiedad</span></div>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="card-header">
+          <div class="card-emoji cat-mental">🎯</div>
+          <div>
+            <div class="card-name">On</div>
+            <span class="card-format">28 sobres</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <p class="card-benefit">Bebida para la concentración y el rendimiento cognitivo. Con nootrópicos naturales para el foco mental.</p>
+          <div class="card-tags"><span class="tag cat-mental">Concentración</span><span class="tag cat-mental">Cognitivo</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DEPORTE -->
+  <div class="section visible" id="sec-deporte">
+    <div class="section-header">
+      <div class="section-icon icon-deporte">🏃</div>
+      <div>
+        <div class="section-title">Rendimiento Físico</div>
+        <div class="section-desc">Para antes, durante y después del entrenamiento</div>
+      </div>
+    </div>
+    <div class="products-grid">
+      <div class="product-card">
+        <div class="card-header">
+          <div class="card-emoji cat-deporte">⚡</div>
+          <div>
+            <div class="card-name">Pre Sport</div>
+            <span class="card-format">28 sobres</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <p class="card-benefit">Pre-entreno con ingredientes naturales para maximizar el rendimiento físico, la fuerza y la resistencia antes del ejercicio.</p>
+          <div class="card-tags"><span class="tag cat-deporte">Pre-entreno</span><span class="tag cat-deporte">Fuerza</span><span class="tag cat-deporte">Resistencia</span></div>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="card-header">
+          <div class="card-emoji cat-deporte">🔄</div>
+          <div>
+            <div class="card-name">Post Sport</div>
+            <span class="card-format">28 sobres</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <p class="card-benefit">Recuperación muscular post-ejercicio. Aminoácidos y antioxidantes para reducir el daño muscular y acortar tiempos de recuperación.</p>
+          <div class="card-tags"><span class="tag cat-deporte">Recuperación</span><span class="tag cat-deporte">Aminoácidos</span></div>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="card-header">
+          <div class="card-emoji cat-deporte">💪</div>
+          <div>
+            <div class="card-name">Protein Active Fit</div>
+            <span class="card-format">14 sobres</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <p class="card-benefit">Proteína de alto rendimiento para personas que entrenan y desean controlar el peso simultáneamente.</p>
+          <div class="card-tags"><span class="tag cat-deporte">Proteína</span><span class="tag cat-deporte">Alto rendimiento</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- COSMETICA -->
+  <div class="section visible" id="sec-cosmetica">
+    <div class="section-header">
+      <div class="section-icon icon-cosmetica">💄</div>
+      <div>
+        <div class="section-title">Cosmética — Lussome & Galeón XXI</div>
+        <div class="section-desc">Líneas de cuidado personal femenino y masculino</div>
+      </div>
+    </div>
+    <div class="products-grid">
+      <div class="product-card">
+        <div class="card-header">
+          <div class="card-emoji cat-cosmetica">👁️</div>
+          <div>
+            <div class="card-name">Lussome — Sérum Contorno de Ojos</div>
+            <span class="card-format">Cosmecéutico Femenino</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <p class="card-benefit">Sérum especializado para la zona del contorno ocular. Reduce ojeras y líneas de expresión con activos botánicos.</p>
+          <div class="card-tags"><span class="tag cat-cosmetica">Contorno ojos</span><span class="tag cat-cosmetica">Antiarrugas</span></div>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="card-header">
+          <div class="card-emoji cat-cosmetica">💧</div>
+          <div>
+            <div class="card-name">Lussome — Sérum Hidratante</div>
+            <span class="card-format">Cosmecéutico Femenino</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <p class="card-benefit">Sérum hidratante concentrado para rostro. Activos naturales que restauran la barrera hidrolipídica y aportan luminosidad.</p>
+          <div class="card-tags"><span class="tag cat-cosmetica">Hidratación</span><span class="tag cat-cosmetica">Luminosidad</span></div>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="card-header">
+          <div class="card-emoji cat-cosmetica">🌟</div>
+          <div>
+            <div class="card-name">Lussome — Sérum Regenerador</div>
+            <span class="card-format">Cosmecéutico Femenino</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <p class="card-benefit">Sérum de alta concentración para la regeneración celular de la piel. Uso nocturno para recuperar firmeza y elasticidad.</p>
+          <div class="card-tags"><span class="tag cat-cosmetica">Regeneración</span><span class="tag cat-cosmetica">Firmeza</span></div>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="card-header">
+          <div class="card-emoji cat-cosmetica">🧴</div>
+          <div>
+            <div class="card-name">Galeón XXI — Shampoo Fortalecedor</div>
+            <span class="card-format">Cuidado Masculino</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <p class="card-benefit">Shampoo para cabello masculino con activos que fortalecen la fibra capilar y reducen la caída.</p>
+          <div class="card-tags"><span class="tag cat-cosmetica">Cabello</span><span class="tag cat-cosmetica">Masculino</span></div>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="card-header">
+          <div class="card-emoji cat-cosmetica">🪒</div>
+          <div>
+            <div class="card-name">Galeón XXI — After Shave</div>
+            <span class="card-format">Cuidado Masculino</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <p class="card-benefit">Loción post-afeitado con ingredientes botánicos calmantes. Cierra poros, hidrata y da frescura duradera.</p>
+          <div class="card-tags"><span class="tag cat-cosmetica">Afeitado</span><span class="tag cat-cosmetica">Calmante</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DISCLAIMER -->
+  <div class="disclaimer">
+    <h3>⚠️ Nota Informativa Importante</h3>
+    <p>Este catálogo es de carácter <strong>informativo e independiente</strong>, basado en información pública de FuXion Biotech. Los productos nutracéuticos <strong>no son medicamentos</strong> y no sustituyen tratamientos médicos. Los beneficios descritos corresponden a la comunicación comercial de la marca y no han sido verificados de forma independiente. Se recomienda siempre consultar a un profesional de la salud antes de iniciar cualquier suplementación.</p>
+  </div>
+
+</div>
+
+<script>
+  function showSection(cat, btn) {
+    // Update buttons
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    const sections = document.querySelectorAll('.section');
+
+    if (cat === 'all') {
+      sections.forEach(s => s.classList.add('visible'));
+    } else {
+      sections.forEach(s => s.classList.remove('visible'));
+      const target = document.getElementById('sec-' + cat);
+      if (target) target.classList.add('visible');
+    }
+    // Scroll to content
+    document.querySelector('.content').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+</script>
+</body>
+</html>
